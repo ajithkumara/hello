@@ -50,7 +50,7 @@
 <button onclick="speakText()">Speak</button>
 
 <script>
-function speak() {
+function speakText() {
     let text = document.getElementById("tts-input").value;
     const audio = new Audio(`/tts?text=${encodeURIComponent(text)}`);
 
