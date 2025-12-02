@@ -50,32 +50,18 @@
 <button onclick="speakText()">Speak</button>
 
 <script>
-async function speakText() {
-    const text = document.getElementById("ttsInput").value;
+function speak() {
+    let text = document.getElementById("tts-input").value;
+    const audio = new Audio(`/tts?text=${encodeURIComponent(text)}`);
 
-    if (!text.trim()) {
-        alert("Please enter some text.");
-        return;
-    }
-
-    const response = await fetch("/api/tts", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ text })
+    audio.addEventListener("error", (e) => {
+        console.log("AUDIO ERROR", e);
     });
 
-    if (!response.ok) {
-        alert("Error generating audio");
-        return;
-    }
-
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-
-    const audio = new Audio(url);
-    audio.play();
+    audio.play().catch(err => console.log("PLAY ERROR:", err));
 }
 </script>
+
 
 </body>
 </html>
