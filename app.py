@@ -1,5 +1,6 @@
 from flask import Flask, request, send_file, jsonify
 from gtts import gTTS
+import soundfile as sf
 import io
 
 app = Flask(__name__)
@@ -11,17 +12,23 @@ def tts():
         return jsonify({"error": "No text provided"}), 400
 
     try:
-        # Generate MP3 directly in memory
+        # Step 1: Generate MP3 in memory
         mp3_bytes = io.BytesIO()
         tts = gTTS(text=text, lang="en")
         tts.write_to_fp(mp3_bytes)
         mp3_bytes.seek(0)
 
+        # Step 2: Convert MP3 -> WAV
+        data, samplerate = sf.read(mp3_bytes, dtype="int16")
+        wav_bytes = io.BytesIO()
+        sf.write(wav_bytes, data, samplerate, format="WAV")
+        wav_bytes.seek(0)
+
         return send_file(
-            mp3_bytes,
-            mimetype="audio/mpeg",
+            wav_bytes,
+            mimetype="audio/wav",
             as_attachment=False,
-            download_name="speech.mp3"
+            download_name="speech.wav"
         )
 
     except Exception as e:
