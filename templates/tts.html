@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text to Speech</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            background-color: #0080ff;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005fcc;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Text to Speech Converter</h2>
+
+<textarea id="ttsInput" placeholder="Enter text here..."></textarea>
+
+<br>
+
+<button onclick="speakText()">Speak</button>
+
+<script>
+async function speakText() {
+    const text = document.getElementById("ttsInput").value;
+
+    if (!text.trim()) {
+        alert("Please enter some text.");
+        return;
+    }
+
+    const response = await fetch("/api/tts", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+    });
+
+    if (!response.ok) {
+        alert("Error generating audio");
+        return;
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    const audio = new Audio(url);
+    audio.play();
+}
+</script>
+
+</body>
+</html>
