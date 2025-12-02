@@ -4,64 +4,61 @@
     <meta charset="UTF-8">
     <title>Text to Speech</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            margin-top: 15px;
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            background-color: #0080ff;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #005fcc;
-        }
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; }
+        textarea { width: 100%; height: 150px; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; }
+        button { margin-top: 15px; padding: 12px 25px; font-size: 16px; border: none; background-color: #0080ff; color: white; border-radius: 6px; cursor: pointer; }
+        button:hover { background-color: #005fcc; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
 <h2>Text to Speech Converter</h2>
-
-<textarea id="ttsInput" placeholder="Enter text here..."></textarea>
-
+<textarea id="ttsInput" placeholder="Enter text here...">Hello, this is a test.</textarea>
 <br>
-
-<button onclick="speakText()">Speak</button>
+<button id="speakBtn" onclick="speakText()">Speak</button>
+<p id="status" style="color: red;"></p>
 
 <script>
 function speakText() {
-    let text = document.getElementById("ttsInput").value; // match ID
-    const audio = new Audio(`/tts?text=${encodeURIComponent(text)}`);
+    const text = document.getElementById("ttsInput").value;
+    const btn = document.getElementById("speakBtn");
+    const status = document.getElementById("status");
 
-    audio.addEventListener("error", (e) => {
-        console.log("AUDIO ERROR", e);
-    });
+    if (!text) {
+        alert("Please enter some text");
+        return;
+    }
 
-    audio.play().catch(err => console.log("PLAY ERROR:", err));
+    status.innerText = "Loading audio...";
+    btn.disabled = true;
+
+    // FIX 1: Corrected Template Literal Syntax (Backticks)
+    // FIX 2: added http://127.0.0.1:5000 to ensure it finds the server even if you open HTML from desktop
+    const url = `http://127.0.0.1:5000/tts?text=${encodeURIComponent(text)}&t=${new Date().getTime()}`;
+
+    const audio = new Audio(url);
+
+    // Play when data is loaded
+    audio.oncanplaythrough = () => {
+        status.innerText = "Playing...";
+        audio.play().catch(e => {
+            status.innerText = "Playback error: " + e.message;
+            console.error(e);
+        });
+    };
+
+    audio.onended = () => {
+        status.innerText = "";
+        btn.disabled = false;
+    };
+
+    audio.onerror = (e) => {
+        console.error("Audio Error", e);
+        status.innerText = "Error loading audio. Check console.";
+        btn.disabled = false;
+    };
 }
 </script>
-
-
 </body>
 </html>
