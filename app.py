@@ -1,43 +1,48 @@
-from flask import Flask, request, send_file, render_template
-from gTTS import gTTS
+from flask import Flask, render_template, request, send_file
+from gtts import gTTS
 import soundfile as sf
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 
-# Home page
-@app.route("/")
+
+# -------------------------
+# HOME PAGE (index.html in root)
+# -------------------------
+@app.route('/')
 def home():
-    return render_template("index.html")
+    return app.send_static_file('index.html')
 
 
-# Text To Speech HTML page
-@app.route("/tts")
+# -------------------------
+# TEXT TO SPEECH PAGE
+# -------------------------
+@app.route('/tts')
 def tts_page():
     return render_template("tts.html")
 
 
-# API that generates speech
-@app.route("/api/tts", methods=["POST"])
+@app.route('/tts/generate', methods=['POST'])
 def generate_tts():
-    data = request.json
-    text = data.get("text", "")
-
-    if not text.strip():
-        return {"error": "No text provided"}, 400
+    text = request.form.get("text")
+    if not text:
+        return "No text provided"
 
     filename = "output.wav"
 
-    # Generate TTS audio using gTTS
-    tts = gTTS(text=text, lang="en")
+    # Generate speech
+    tts = gTTS(text=text, lang='en')
     tts.save(filename)
 
-    # Fix any audio format issues
-    audio_data, samplerate = sf.read(filename)
-    sf.write(filename, audio_data, samplerate)
+    # Fix WAV format using soundfile
+    data, samplerate = sf.read(filename)
+    sf.write(filename, data, samplerate)
 
-    return send_file(filename, mimetype="audio/wav")
+    return send_file(filename, as_attachment=True)
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+# -------------------------
+# RUN APP
+# -------------------------
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
