@@ -48,5 +48,8 @@ def tts():
         return {"error": str(e)}, 500
 
 if __name__ == "__main__":
-    # Ensure tts.html is in the same folder as app.py
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    import os
+    # Render sets PORT automatically (default: 10000)
+    port = int(os.environ.get("PORT", 5000))
+    # MUST bind to 0.0.0.0 — not 127.0.0.1!
+    app.run(host="0.0.0.0", port=port, debug=False)
