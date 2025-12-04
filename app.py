@@ -8,7 +8,8 @@ app = Flask(__name__)
 # Route 1: Serve the main page
 @app.route("/")
 def home():
-    return send_from_directory(".", "tts.html")  # reads tts.html from current dir
+    return send_from_directory(".", "index.html")  # or "static", depending on structure
+    #return send_from_directory(".", "tts.html")  # reads tts.html from current dir
 
 # Route 2: TTS API
 @app.route("/tts")
