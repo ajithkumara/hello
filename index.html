@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BroCodeHub</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #23234d);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .container {
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            width: 250px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 15px;
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 70px;
+            padding: 20px;
+            opacity: 0.6;
+            font-size: 14px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to BroCodeHub</h1>
+    <p class="subtitle">Tools • Fun • Productivity</p>
+</header>
+
+<div class="container">
+    <a href="games">
+        <div class="card">
+            <h2>🎮 Games</h2>
+            <p>Play simple fun browser games.</p>
+        </div>
+    </a>
+
+    <a href="yt-downloader">
+        <div class="card">
+            <h2>⬇ YouTube Downloader</h2>
+            <p>Download YouTube videos easily.</p>
+        </div>
+    </a>
+
+    <a href="/tts-page">
+        <div class="card">
+            <h2>🗣 Text to Speech</h2>
+            <p>Convert text into spoken audio.</p>
+        </div>
+    </a>
+</div>
+
+<footer>
+    © 2025 BroCodeHub.com — All Rights Reserved
+</footer>
+</body>
+</html>
