@@ -22,6 +22,10 @@ def yt_downloader_page():
 @app.route("/games")
 def games_page():
     return send_from_directory(".", "games.html")
+
+@app.route("/analytics")
+def analytics_page():
+    return send_from_directory(".", "analytics.html")
 # ---------------------------
 # OPTIONAL TTS HTML PAGE
 # ---------------------------
